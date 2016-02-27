@@ -2,3 +2,4 @@ gems/
 config.yml
 *.log*
 *_.rb
+*.txt

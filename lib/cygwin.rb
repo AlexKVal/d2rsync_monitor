@@ -6,9 +6,14 @@ end
 def cygwin_run(unix_cmd)
   puts "#{unix_cmd}"
 
-  `#{bash_cmd(unix_cmd)}`
-  puts "[ #{$?} ]"
-  $? == 0 # was it OK?
+  output = `#{bash_cmd(unix_cmd)}`
+  puts "[ #{$?} ] (#{output})"
+  output
+end
+
+def is_ok_cygwin_run(unix_cmd)
+  cygwin_run
+  $? == 0
 end
 
 def to_cygwin_path(win_path)
