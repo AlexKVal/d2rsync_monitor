@@ -62,7 +62,7 @@ def main_job(branches)
 		IO.write(@donts_file, donts.join("\n"))
 	end
 
-	puts "The End."
+	puts "========================\n"
 end
 
 

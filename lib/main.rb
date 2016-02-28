@@ -30,9 +30,12 @@ def job_on_node(ip, t_id)
   # return "cannot connect" unless is_connection_ok(node)
 
   res = get_backup_nodes_for node
-  return res unless res.is_a? Array
 
-  puts "Nodes: #{res}"
+  return res unless res.is_a? Array # some error
+
+  return "The list of nodes is empty. Fix it!" if res.empty?
+
+  puts "#{res.length} #{ip}"
 
   return :ok
 end
