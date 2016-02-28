@@ -3,7 +3,7 @@ ROOT_DIR ||= File.expand_path(File.join(File.dirname(__FILE__), '..')) #.tr('/',
 
 def run_on(node, remote_cmd)
   identity_file = to_cygwin_path(File.join(ROOT_DIR, 'id_rsa'))
-  cygwin_run("ssh -i #{identity_file} #{node} '#{remote_cmd} 2>&1'")
+  cygwin_run("ssh -o LogLevel=quiet -i #{identity_file} #{node} '#{remote_cmd} 2>&1'")
 end
 
 def get_backup_nodes_for(node)
