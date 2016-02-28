@@ -1,17 +1,20 @@
 # d2rsync monitor
 
-WIP: it will check if rsync has been really done on all nodes
+It checks if rsync has been really done on all backup nodes
 
-#### algo
+It's complementary to `d2rsync / d2rsync_node` utilities
 
-- repeat for every server
-- read via `ssh admin@server c:\d2rsync\config.yml nodes_up: []`
+### Usage
 
+- fill in the `config.yml` with servers IPs
+```yml
+ ---
+branches:
+    name1: 10.0.0.2
+    name2: 10.0.1.2
+    name3: 10.0.3.2
 ```
-rsynced: e:\rsynced
-nodes_up:
-- User@10.0.31.231:/cygdrive/c/rsynced
-```
 
-then connect to each node and read the date of the latest link
-and compare the link date with the current date.
+- put `id_rsa` to the project root folder
+
+- and run `get-state.cmd`
