@@ -18,14 +18,26 @@ def get_backup_nodes_for(node)
   YAML.load(remote_reply)['nodes_up']
 end
 
+def get_link_date_for(station)
+  node, cygwin_path = station.split(':')
+
+  remote_cmd = "stat -c %x #{cygwin_path}" # get time of last access
+
+  remote_reply, success = run_on node, remote_cmd
+
+  return Date.parse('1980-01-01') unless success
+
+  begin
+    Date.parse(remote_reply)
+  rescue ArgumentError
+    Date.parse('1980-02-02')
+  end
+end
+
 def check_link_dates(stations)
   stations_with_dates = stations.map do |station|
-    login_ip, cygwin_path = station.split(':')
-
-    date_of_link = Date.today.to_s
-
-    _, ip = login_ip.split('@')
-    {ip: ip, date: Date.parse(date_of_link)}
+    _, ip = station.split(':')[0].split('@')
+    {ip: ip, date: get_link_date_for(station)}
   end
 
   stations_with_dates.select {|st| st[:date] != Date.today}
