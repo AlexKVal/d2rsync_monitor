@@ -5,6 +5,10 @@ require 'logger'
 require 'yaml'
 require "cygwin"
 
+# always start off with a clean slate
+@donts_file = 'donts.txt'
+File.delete @donts_file if File.exists? @donts_file
+
 def log
 	unless @logger
 		@logger = Logger.new(File.join(ROOT_DIR, "run.log"), 3, 1024000)
@@ -45,22 +49,17 @@ def main_job(branches)
 	threads_for_sync.each do |t|
 	  puts "THREAD[#{t[:id]}] #{t[:branch_name]} #{t[:res]}"
 
-	  case t[:res]
-	  when :ok
-	    # node_is_up t[:node]
-	  when :notok
-	    donts << t[:branch_name]
-	  end
+		donts << "#{t[:branch_name]} #{t[:res]}" unless t[:res] == :ok
 	end
 
 	if donts.empty?
 		puts "All done OK."
 	else
 		puts "Donts: #{donts.size}/#{branches.size}"
-		donts.each do |name|
-			puts name
+		donts.each do |reason|
+			puts reason
 		end
-		IO.write('donts.txt', donts.join("\n"))
+		IO.write(@donts_file, donts.join("\n"))
 	end
 
 	puts "The End."
@@ -75,7 +74,7 @@ end
 
 def for_one_node(node)
   before_all
-	branches = {'alone' => node}
+	branches = {"#{node}" => node}
 	main_job branches
   log.info('END') {"== the end of iteration =="}
 end
@@ -87,7 +86,7 @@ when '-run'
 when nil
 	puts "Usage:"
 	puts "main.rb -run"
-	puts "main.rb user@ip"
+	puts "main.rb node-ip"
 else
 	for_one_node(ARGV[0])
 end
