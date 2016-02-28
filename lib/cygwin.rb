@@ -1,5 +1,3 @@
-DEBUG = false
-
 # nice -n19 the least priority on windows system
 def bash_cmd(unix_cmd)
   "c:\\cygwin\\bin\\bash -l -c \"nice -n19 #{unix_cmd}\""

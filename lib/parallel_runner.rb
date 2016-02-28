@@ -47,7 +47,7 @@ def main_job(branches)
 	donts = []
 	# and finally get results for all jobs
 	threads_for_sync.each do |t|
-	  puts "THREAD[#{t[:id]}] #{t[:branch_name]} #{t[:res]}"
+	  puts "THREAD[#{t[:id]}] #{t[:branch_name]} #{t[:res]}" if DEBUG
 
 		donts << "#{t[:branch_name]} #{t[:res]}" unless t[:res] == :ok
 	end

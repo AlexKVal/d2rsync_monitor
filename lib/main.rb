@@ -1,6 +1,8 @@
 $:.unshift(File.expand_path(File.dirname(__FILE__))) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 ROOT_DIR ||= File.expand_path(File.join(File.dirname(__FILE__), '..')) #.tr('/', '\\')
 
+DEBUG = false
+
 def run_on(node, remote_cmd)
   identity_file = to_cygwin_path(File.join(ROOT_DIR, 'id_rsa'))
   cygwin_run("ssh -o LogLevel=quiet -i #{identity_file} #{node} '#{remote_cmd} 2>&1'")
