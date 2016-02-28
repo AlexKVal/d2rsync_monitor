@@ -18,6 +18,23 @@ def get_backup_nodes_for(node)
   YAML.load(remote_reply)['nodes_up']
 end
 
+def check_link_dates(stations)
+  stations_with_dates = stations.map do |station|
+    login_ip, cygwin_path = station.split(':')
+
+    date_of_link = Date.today.to_s
+
+    _, ip = login_ip.split('@')
+    {ip: ip, date: Date.parse(date_of_link)}
+  end
+
+  stations_with_dates.select {|st| st[:date] != Date.today}
+end
+
+def format_unconfirmed(unconfirmed)
+  "Unconfirmed:\n  " + unconfirmed.map {|st| st.values.join(' ')}.join("\n  ")
+end
+
 
 ############################
 def before_all
@@ -37,7 +54,10 @@ def job_on_node(ip, t_id)
 
   return "The list of nodes is empty. Fix it!" if res.empty?
 
-  puts "#{res.length} #{ip}"
+  puts "#{res.length} #{ip}" if DEBUG
+
+  unconfirmed = check_link_dates(res)
+  return format_unconfirmed(unconfirmed) if unconfirmed.length > 0
 
   return :ok
 end
