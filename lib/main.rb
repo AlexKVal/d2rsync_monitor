@@ -11,6 +11,7 @@ end
 def get_backup_nodes_for(node)
   remote_cmd = "cat #{to_cygwin_path("c:/d2rsync/config.yml")}"
 
+  puts "server: #{node.split('@')[1]}"
   remote_reply, success = run_on node, remote_cmd
 
   return remote_reply unless success
@@ -23,6 +24,7 @@ def get_link_date_for(station)
 
   remote_cmd = "stat -c %x #{cygwin_path}" # get time of last access
 
+  puts "station: #{node.split('@')[1]}"
   remote_reply, success = run_on node, remote_cmd
 
   return Date.parse('1980-01-01') unless success
