@@ -16,7 +16,14 @@ def get_backup_nodes_for(node)
 
   return remote_reply unless success
 
-  YAML.load(remote_reply)['nodes_up']
+  begin
+    remoteConfig = YAML.load(remote_reply)
+  rescue
+    puts "server: #{node.split('@')[1]} has wrong config"
+    return []
+  end
+
+  remoteConfig['nodes_up']
 end
 
 def get_link_date_for(station)
